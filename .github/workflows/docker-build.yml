@@ -50,6 +50,16 @@ jobs:
             # set latest tag for default branch
             type=raw,value=latest,enable={{is_default_branch}}
 
+      - name: Extract cache metadata for Docker
+        id: cache-meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{inputs.image}}
+          flavor: |
+            suffix=cache
+          tags: |
+            type=ref,event=branch
+
       - name: Build and push Docker images
         uses: docker/build-push-action@v6.13.0
         with:
@@ -60,5 +70,5 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: |
             type=registry,ref=${{inputs.image}}:main-cache
-            type=registry,ref=${{inputs.image}}:${{github.ref_name}}-cache
-          cache-to: type=registry,ref=${{inputs.image}}:${{github.ref_name}}-cache,mode=max
+            type=registry,ref=${{steps.cache-meta.outputs.tags}}
+          cache-to: type=registry,ref=${{steps.cache-meta.outputs.tags}},mode=max
