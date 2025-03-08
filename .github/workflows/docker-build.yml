@@ -4,9 +4,10 @@ on:
       image:
         required: true
         type: string
-      ENV_VARS:
+      env:
         required: false
-        type: string
+        type: boolean
+        default: false
     secrets:
       REGISTRY_PASSWORD:
         required: true
@@ -15,10 +16,16 @@ jobs:
   docker-build:
     runs-on: ubuntu-latest
     steps:
+      - name: Download environment variables
+        if: inputs.env
+        uses: actions/download-artifact@v3
+        with:
+          name: env-vars
+
       - name: Export environment variables
-        if: inputs.ENV_VARS != ''
+        if: inputs.env
         run: |
-          echo "${{ inputs.ENV_VARS }}" >> $GITHUB_ENV
+          cat env.list >> $GITHUB_ENV
 
       - name: Checkout repository
         uses: actions/checkout@v4
