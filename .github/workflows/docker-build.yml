@@ -4,6 +4,10 @@ on:
       image:
         required: true
         type: string
+      dockerfile:
+        required: false
+        type: string
+        default: Dockerfile
       env:
         required: false
         type: boolean
@@ -64,7 +68,7 @@ jobs:
         uses: docker/build-push-action@v6.13.0
         with:
           context: .
-          file: Dockerfile
+          file: ${{inputs.dockerfile}}
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
