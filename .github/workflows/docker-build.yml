@@ -14,7 +14,6 @@ on:
       build-args:
         required: false
         type: string
-        default: "[]"
       env:
         required: false
         type: boolean
@@ -76,7 +75,7 @@ jobs:
         with:
           context: .
           file: ${{inputs.dockerfile}}
-          build-args: ${{fromJson(inputs.build-args)}}
+          build-args: ${{ inputs.build-args }}
           target: ${{inputs.target}}
           push: true
           tags: ${{ steps.meta.outputs.tags }}
