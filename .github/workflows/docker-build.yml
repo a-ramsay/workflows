@@ -19,6 +19,10 @@ on:
         required: false
         type: boolean
         default: false
+    outputs:
+      image_url:
+        description: Registry URL including tag for the image just built. Will use SHA tag if enabled, otherwise will use the branch tag.
+        value: ${{ jobs.docker-build.outputs.image_url }}
     secrets:
       REGISTRY_PASSWORD:
         required: true
