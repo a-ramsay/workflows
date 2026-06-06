@@ -15,14 +15,14 @@ on:
         required: false
         type: boolean
         default: false
-      sha_tag:
+      sha-tag:
         required: false
         type: boolean
         default: false
     outputs:
-      image_url:
+      image-url:
         description: Registry URL including tag for the image just built. Will use SHA tag if enabled, otherwise will use the branch tag.
-        value: ${{ jobs.docker-build.outputs.image_url }}
+        value: ${{ jobs.docker-build.outputs.image-url }}
     secrets:
       REGISTRY_PASSWORD:
         required: true
@@ -31,7 +31,7 @@ jobs:
   docker-build:
     runs-on: ubuntu-latest
     outputs:
-      image_url: ${{ inputs.sha_tag && fromJson(steps.meta.outputs.json).tags[fromJson(steps.meta.outputs.json).tags.length-1] || fromJson(steps.meta.outputs.json).tags[0]}}
+      image-url: ${{ steps.set-output.outputs.image_url }}
     steps:
       - name: Download environment variables
         if: inputs.env
@@ -92,3 +92,17 @@ jobs:
             type=registry,ref=${{inputs.image}}:main-cache
             type=registry,ref=${{steps.cache-meta.outputs.tags}}
           cache-to: type=registry,ref=${{steps.cache-meta.outputs.tags}},mode=max
+
+      - name: Set output image URL
+        id: set-output
+        run: |
+          # Parse the tags array into a bash array
+          tags=$(echo '${{ steps.meta.outputs.json }}' | jq -r '.tags')
+          
+          if [[ "${{ inputs.sha_tag }}" == "true" ]]; then
+            # Get last element
+            echo "image_url=$(echo $tags | jq -r '.[-1]')" >> $GITHUB_OUTPUT
+          else
+            # Get first element
+            echo "image_url=$(echo $tags | jq -r '.[0]')" >> $GITHUB_OUTPUT
+          fi
