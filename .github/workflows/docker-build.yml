@@ -27,7 +27,7 @@ jobs:
   docker-build:
     runs-on: ubuntu-latest
     outputs:
-      image_url: ${{ inputs.sha_tag && fromJson(steps.meta.outputs.json).tags[-1] || fromJson(steps.meta.outputs.json).tags[0]}}
+      image_url: ${{ inputs.sha_tag && fromJson(steps.meta.outputs.json).tags[fromJson(steps.meta.outputs.json).tags.length-1] || fromJson(steps.meta.outputs.json).tags[0]}}
     steps:
       - name: Download environment variables
         if: inputs.env
