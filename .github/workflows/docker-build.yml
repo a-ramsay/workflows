@@ -29,6 +29,7 @@ on:
 
 jobs:
   docker-build:
+    name: Build Docker Image
     runs-on: ubuntu-latest
     outputs:
       image-url: ${{ steps.set-output.outputs.image_url }}
