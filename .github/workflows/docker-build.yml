@@ -67,7 +67,7 @@ jobs:
             # set latest tag for default branch
             type=raw,value=latest,enable={{is_default_branch}}
             # Dynamically add SHA tag if sha_tag input is true
-            ${{ inputs.sha_tag && 'type=sha,format=long' || '' }}
+            ${{ inputs.sha-tag && 'type=sha,format=long' || '' }}
 
       - name: Extract cache metadata for Docker
         id: cache-meta
@@ -99,7 +99,7 @@ jobs:
           # Parse the tags array into a bash array
           tags=$(echo '${{ steps.meta.outputs.json }}' | jq -r '.tags')
           
-          if [[ "${{ inputs.sha_tag }}" == "true" ]]; then
+          if [[ "${{ inputs.sha-tag }}" == "true" ]]; then
             # Get last element
             echo "image_url=$(echo $tags | jq -r '.[-1]')" >> $GITHUB_OUTPUT
           else
