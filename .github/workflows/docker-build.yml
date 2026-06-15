@@ -71,6 +71,9 @@ jobs:
             type=ref,event=branch
             # set latest tag for default branch
             type=raw,value=latest,enable={{is_default_branch}}
+            # set branch name if PR or not default
+            type=ref,event=push,enable={{is_not_default_branch}}
+            type=ref,event=pull_request
             # set tags if present
             type=semver,pattern={{version}}
             type=semver,pattern={{major}}
