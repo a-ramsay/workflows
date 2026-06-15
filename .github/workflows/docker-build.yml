@@ -90,6 +90,7 @@ jobs:
             suffix=cache
           tags: |
             type=ref,event=branch
+            type=ref,event=pr
 
       - name: Build and push Docker images
         uses: docker/build-push-action@v7.2.0
