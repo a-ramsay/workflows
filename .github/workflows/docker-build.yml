@@ -72,9 +72,9 @@ jobs:
             # set latest tag for default branch
             type=raw,value=latest,enable={{is_default_branch}}
             # set tags if present
-            type=semver,pattern={{version}},enable={{tag}}
-            type=semver,pattern={{major}},enable={{tag}}
-            type=semver,pattern={{major}}.{{minor}},enable={{tag}}
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}
+            type=semver,pattern={{major}}.{{minor}}
             # Dynamically add SHA tag if sha_tag input is true
             ${{ inputs.sha-tag && 'type=sha,format=long' || '' }}
 
